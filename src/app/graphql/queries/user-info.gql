@@ -1,0 +1,28 @@
+query (
+  $searchName: String!
+) {
+  user (login: $searchName){
+    id
+    avatarUrl
+    name
+    login
+    company
+    location
+    websiteUrl
+    repositories (first: 10) {
+      nodes {
+        id
+        name
+        isPrivate
+        languages(first:5) {
+          nodes {
+            id
+            name
+            color
+          }
+        }
+        url
+      }
+    }
+  }  
+}

@@ -1,0 +1,16 @@
+.company-logo {
+  float: left;
+  width: 100px;
+  height: 100px;
+  margin-right: 10px;
+}
+
+.text {
+  text-align: left;
+  margin-left: 120px;
+  height: 100px;
+}
+
+.text-grey-light {
+  color: #6a737d;
+}

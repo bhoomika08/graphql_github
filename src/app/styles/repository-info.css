@@ -1,0 +1,147 @@
+.pagehead {
+  margin-left: 20px;
+  position: relative;
+  padding-top: 20px;
+  border-bottom: 1px solid #e1e4e8;
+}
+
+.pagehead a {
+  color: #0366d6;
+  text-decoration: none;
+  font-weight: 200px;
+}
+
+.pagehead a:hover {
+  text-decoration: underline;
+}
+
+.pagehead .repo-path {
+  margin-right: 20px;
+  color: #0366d6;
+}
+
+.pagehead h3 {
+  min-height: 32px;
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.path-divider {
+  margin: 0 .25em;
+  color: #6a737d;
+}
+
+.language {
+  display: flex;
+  margin: 15px 0px;
+}
+
+.lang-color-container {
+  width: 10px;
+  height: 10px;
+  line-height: 10px;
+  -moz-border-radius: 30px;
+  border-radius: 30px;
+  padding: 5px;
+  display: block;
+  margin: 5px 4px 5px 15px;
+}
+
+.pageactions {
+  display: flex;
+}
+
+.actions-container li {
+  display: inline-block;
+  padding: 8px;
+  margin: 10px;
+  color: #27313b;
+  list-style-type: none;
+  border: 1px solid rgba(27,31,35,.2);
+  border-radius: .25em;
+}
+
+.action {
+  font-size: 18px;
+  font-weight: bold;
+  vertical-align: middle;
+  margin-right: 15px;
+}
+
+.count {
+  font-size: 15px;
+  vertical-align: middle;
+}
+
+.members-container {
+  margin-top: 100px;
+  margin: 50px;
+}
+
+.members-div {
+  margin-top: 15px;
+  margin-left: -5px;
+  margin-right: -5px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.user-data-block {
+	border: solid 1px;
+	padding: 10px;
+  margin: 5px;
+  width: 150px;
+  display: flex;
+  flex-direction: column;
+}
+
+.user-data-block a {
+  margin-top: auto;
+  font-size: 14px;
+}
+
+.list-view {
+  border-collapse: collapse;
+  width: 80%;
+}
+
+.listElement td {
+  border: 1px solid #ddd;
+  vertical-align: middle;
+  padding: 5px 5px;
+}
+
+.member-avatar {
+  width: 50px;
+  height: 50px;
+}
+
+.view-tab{
+	display: inline-block;
+	background-color: white;
+	border: 1px solid black;
+	color: black;
+	padding: 8px;
+	border-radius: 5px;
+	margin-right: 10px;
+	cursor: pointer;
+	font-weight: bold;
+}
+
+.repo-tab:hover{
+	background-color: #344a40;
+}
+
+.active-view {
+	background-color:rgb(163, 163, 157);
+}
+
+.highlight-subscribe {
+  background-color: cornflowerblue;
+}
+
+.not-active {
+  background-color: darkkhaki;
+}

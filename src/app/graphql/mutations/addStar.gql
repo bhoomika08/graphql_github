@@ -1,0 +1,10 @@
+mutation ($starrableId: ID!) {
+  addStar(input: {starrableId: $starrableId}) {
+    starrable {
+      viewerHasStarred
+      stargazers {
+        totalCount
+      }
+    }
+  }
+}
