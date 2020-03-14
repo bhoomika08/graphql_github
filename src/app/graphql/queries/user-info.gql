@@ -1,7 +1,7 @@
 query (
   $searchName: String!
 ) {
-  user (login: $searchName){
+  user(login: $searchName){
     id
     avatarUrl
     name
@@ -9,19 +9,20 @@ query (
     company
     location
     websiteUrl
-    repositories (first: 10) {
+    repositories(first: 50) {
+      totalCount
       nodes {
         id
         name
         isPrivate
-        languages(first:5) {
+        url
+        languages(first: 5) {
           nodes {
             id
             name
             color
           }
         }
-        url
       }
     }
   }  

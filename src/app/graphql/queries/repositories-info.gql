@@ -12,10 +12,15 @@ query (
     }
     name
     isPrivate
-    description
     descriptionHTML
-    watchers {
+    watchers(first: 5) {
       totalCount
+      nodes {
+        id
+        avatarUrl
+        name
+        login
+      }
     }
     stargazers {
       totalCount

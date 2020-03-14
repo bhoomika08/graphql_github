@@ -14,3 +14,8 @@
 .text-grey-light {
   color: #6a737d;
 }
+
+.org-header {
+  border-bottom: 1px solid #6a737d;
+  height: 150px;
+}

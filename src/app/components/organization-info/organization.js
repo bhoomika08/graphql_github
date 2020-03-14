@@ -1,21 +1,23 @@
 import React from 'react';
-import Repositories from './repositories';
-import '../../styles/organization.css';
+import Repositories from 'app/components/organization-info/repositories';
+import 'app/styles/organization.css';
 
-const Organization = ({ path, organization, repositories, selectedLanguages }) => {
+const Organization = ({ path, fetchedData }) => {
   return (
     <div className="app">
-      <img className="company-logo" src={organization.avatarUrl} alt={organization.name}></img>
-      <div className="text">
-        <div>
-          <h2><strong>{organization.name}</strong></h2>
+      <div className="org-header">
+        <img className="company-logo" src={fetchedData.avatarUrl} alt={fetchedData.name}></img>
+        <div className="text">
+          <div>
+            <h2><strong>{fetchedData.name}</strong></h2>
+          </div>
+          <div className="text-grey-light">
+            {fetchedData.description}
+          </div>
         </div>
-        <div className="text-grey-light">
-          {organization.description}
-        </div>
-      </div> 
+      </div>
       {
-        repositories.length ? <Repositories path={path} organization={organization} repositories={repositories} selectedLanguages={selectedLanguages}/> : ''
+        fetchedData.repositories.nodes.length ? <Repositories fetchedData={fetchedData} path={path} /> : ''
       }
     </div>
   )

@@ -1,18 +1,12 @@
-import React from 'react';
-import { withApollo } from "react-apollo";
 import { loader } from 'graphql.macro';
-import PageHeader from './page-header';
-import PageActions from './page-actions';
-import RepoMembers from './repo-members';
+import PageActions from 'app/components/repository-info/page-actions';
+import PageHeader from 'app/components/repository-info/page-header';
+import React from 'react';
+import RepoMembers from 'app/components/repository-info/repo-members';
+import { graphql, withApollo } from "react-apollo";
+import { flowRight as compose } from 'lodash';
 
-const GET_REPOSITORIES_INFO = loader('../../graphql/queries/repositories-info.gql')
-
-const getRepositories = (client, repository, owner) => {
-  return client.query({
-    query: GET_REPOSITORIES_INFO,
-    variables: { repository, owner },
-  });
-};
+const GET_REPOSITORIES_INFO = loader('app/graphql/queries/repositories-info.gql')
 
 class RepositoryInfo extends React.Component {
   constructor(props) {
@@ -22,32 +16,19 @@ class RepositoryInfo extends React.Component {
       error: null,
     }
   }
-  componentDidMount() {
-    const repoName = this.props.match.params.reponame;
-    const orgName = this.props.match.params.orgname;
-    const client = this.props.client;
-    this.setState({ isLoading: true})
-    getRepositories(client, repoName, orgName)
-      .then(queryResult => {
-        const { data, loading, error } = queryResult
-        this.setState({
-          repository: data.repository,
-          error: error,
-          isLoading: loading
-        })
-      })
-      .catch(error => this.setState({ error: error, isLoading: false}))
-  }
 
   render() {
-    const { repository, isLoading, error } = this.state;
+    const { loading, error, repository} = this.props.data;
     return (
       <>
-        {isLoading && <div className="loader-container">
-          <div className="loader"></div>
-        </div>}
+        {loading &&
+          <div className="loader-container">
+            <div className="loader"></div>
+          </div>
+        }
         {error &&
-          <p>{error.message}</p>}
+          <p>{error.message}</p>
+        }
         {
           repository &&
           <>
@@ -61,4 +42,16 @@ class RepositoryInfo extends React.Component {
   }
 }
 
-export default withApollo(RepositoryInfo);
+const REPO_INFO = compose(
+  withApollo,
+  graphql(GET_REPOSITORIES_INFO, {
+  options: (props) => ({
+    variables: {
+      repository: props.match.params.repoName,
+      owner: props.match.params.owner
+    },
+    fetchPolicy: "cache-and-network",
+  }),
+}))(RepositoryInfo)
+
+export default REPO_INFO;

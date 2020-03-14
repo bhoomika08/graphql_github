@@ -65,7 +65,6 @@
 
 .action {
   font-size: 18px;
-  font-weight: bold;
   vertical-align: middle;
   margin-right: 15px;
 }
@@ -76,8 +75,8 @@
 }
 
 .members-container {
-  margin-top: 100px;
-  margin: 50px;
+  margin-top: 50px;
+  margin-left: 50px;
 }
 
 .members-div {
@@ -89,8 +88,8 @@
 }
 
 .user-data-block {
-	border: solid 1px;
-	padding: 10px;
+  border: solid 1px;
+  padding: 10px;
   margin: 5px;
   width: 150px;
   display: flex;
@@ -118,7 +117,7 @@
   height: 50px;
 }
 
-.view-tab{
+.view-tab {
 	display: inline-block;
 	background-color: white;
 	border: 1px solid black;
@@ -130,12 +129,12 @@
 	font-weight: bold;
 }
 
-.repo-tab:hover{
-	background-color: #344a40;
+.repo-tab:hover {
+  background-color: #344a40;
 }
 
 .active-view {
-	background-color:rgb(163, 163, 157);
+  background-color:rgb(163, 163, 157);
 }
 
 .highlight-subscribe {

@@ -5,7 +5,6 @@
 .app {
   text-align: center;
   width: 1000px;
-  /* display: table; */
   margin: 0 auto;
   padding: 0 15px;
 }
@@ -27,14 +26,14 @@
 
 .loader-container {
   position: fixed;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
-    top: 0px;
-    background: #00000050;
-    align-items: center;
-    justify-content: center;
-    display: flex;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  top: 0px;
+  background: #00000050;
+  align-items: center;
+  justify-content: center;
+  display: flex;
 }
 
 .loader {

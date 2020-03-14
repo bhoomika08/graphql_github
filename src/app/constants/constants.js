@@ -1,9 +1,0 @@
-export const TITLE = 'React GraphQL GitHub';
-export const USER_SEARCH_BUTTON = "Search By User";
-export const ORG_SEARCH_BUTTON = "Search By Organization";
-export const SHOW_USER_REPO_TEXT = 'Search Repositories for user';
-export const SHOW_ORG_REPO_TEXT = 'Search Repositories for organization';
-export const ERROR_TEXT = 'Something went wrong...';
-export const REPO_COUNT_TEXT = 'Total Repositories: ';
-export const USER_SEARCH_PLACEHOLDER = "User Login";
-export const ORG_SEARCH_PLACEHOLDER = "Organization Name";

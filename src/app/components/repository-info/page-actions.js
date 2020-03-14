@@ -1,39 +1,48 @@
 import React from 'react';
 import { loader } from 'graphql.macro';
 import gql from 'graphql-tag';
-import '../../styles/repository-info.css';
-import EyeIcon from '../../../assets/images/eye.png';
-import UnstarIcon from '../../../assets/images/unstar.png';
-import StarredIcon from '../../../assets/images/starred.png';
-import ForkIcon from '../../../assets/images/fork.png';
+import 'app/styles/repository-info.css';
+import EyeIcon from 'assets/images/eye.png';
+import UnstarIcon from 'assets/images/unstar.png';
+import StarredIcon from 'assets/images/starred.png';
+import ForkIcon from 'assets/images/fork.png';
+import { graphql } from "react-apollo";
+import { flowRight as compose } from 'lodash';
 
-const ADD_STAR = loader('../../graphql/mutations/addStar.gql');
-const REMOVE_STAR = loader('../../graphql/mutations/removeStar.gql');
+const ADD_STAR = loader('app/graphql/mutations/addStar.gql');
+const REMOVE_STAR = loader('app/graphql/mutations/removeStar.gql');
+
+const viewer = {
+  __typename: "User",
+  id: 10,
+  name: "Bhoomika",
+  login: "bhoomika08"
+}
 
 class PageActions extends React.Component {
   constructor(props) {
     super(props);
+    const { viewerHasStarred, viewerCanSubscribe, stargazers } = props.repository;
     this.state = {
-      isStarred: props.repository.viewerHasStarred,
-      stargazersCount: props.repository.stargazers.totalCount
+      isSubscribed: viewerCanSubscribe,
+      isStarred: viewerHasStarred,
+      stargazersCount: stargazers.totalCount
     }
-    this.mutateStar = this.mutateStar.bind(this);
-    this.isSubscribed = this.isSubscribed.bind(this);
   }
 
   generateActions() {
-    const { watchers, forkCount, viewerHasStarred } = this.props.repository;
-    const { isStarred, stargazersCount } = this.state;
+    const { forkCount, viewerHasStarred, viewerCanSubscribe, watchers, stargazers } = this.props.repository;
     return {
       watch: {
-        label: "Watch",
+        label: viewerCanSubscribe ? "Watch" : "Unwatch",
         icon: EyeIcon,
         count: watchers.totalCount,
+        onClick: this.modifyWatchCount,
       },
       star: {
-        label: isStarred ? "Unstar" : "Star",
-        icon: isStarred ? StarredIcon : UnstarIcon,
-        count: stargazersCount,
+        label: viewerHasStarred ? "Unstar" : "Star",
+        icon: viewerHasStarred ? StarredIcon : UnstarIcon,
+        count: stargazers.totalCount,
         isStarred: viewerHasStarred,
         onClick: this.mutateStar,
       },
@@ -46,67 +55,78 @@ class PageActions extends React.Component {
   }
 
   mutateStar = () => {
-    this.state.isStarred ? this.removeStar() : this.addStar()
+    this.props.repository.viewerHasStarred ? this.removeStar() : this.addStar()
   }
 
   addStar = () => {
-    this.props.client.mutate({
-      mutation: ADD_STAR,
+    this.props.addStarMutation({
       variables: {
         starrableId: this.props.repository.id
-      }
-    }).then(({ data }) => {
-      this.setState({
-        isStarred: true,
-        stargazersCount: data.addStar.starrable.stargazers.totalCount
-      })
-    }, (error) => {
-      console.log('there was an error sending the query', error);
+      },
     });
   }
 
   removeStar = () => {
-    this.props.client.mutate({
-      mutation: REMOVE_STAR,
-      variables: {
-        starrableId: this.props.repository.id
-      }
-    }).then(({ data }) => {
-      this.setState({
-        isStarred: false,
-        stargazersCount: data.removeStar.starrable.stargazers.totalCount
-      })
-    }, (error) => {
-      console.log('there was an error sending the query', error);
+    this.props.removeStarMutation({
+        variables: {
+          starrableId: this.props.repository.id
+        },
     });
   }
 
-  isSubscribed() {
-    const todo = this.props.client.readFragment({
-      id: this.props.repository.id,
-      fragment: gql`
-        fragment subscribe on GET_REPOSITORIES_INFO {
-          viewerCanSubscribe
-        }
-      `,
-    });
+  writeFragment = (args, data) => {
+    this.props.client.writeFragment({ ...args }, data);
+  }
 
-    this.props.client.writeFragment({
-      id: this.props.repository.id,
-      fragment:
-      gql`
-        fragment subscribe on GET_REPOSITORIES_INFO {
+  modifyWatchCount = () => {
+    const id = 'Repository:' + this.props.repository.id,
+      fragment = gql`
+        fragment watcher on Repository {
+          __typename
+          id
           viewerCanSubscribe
+          watchers(first: 5) {
+            __typename
+            totalCount
+            nodes {
+              __typename
+              id
+              name
+              login
+            }
+          }
         }
-       `,
-      data: {
-        todo: {
-          __typename: this.props.repository.__typename,
-          viewerCanSubscribe: false,
-        }
-      },
-    });
-    console.log(todo);
+      `;
+    this.props.repository.viewerCanSubscribe ? this.watch({ id, fragment }) : this.unwatch({ id, fragment });
+  }
+
+  unwatch = (args) => {
+    const data = this.props.client.readFragment({ ...args });
+    const newData = {
+      ...data,
+      viewerCanSubscribe: true,
+      watchers: {
+        ...data.watchers,
+        totalCount: data.watchers.totalCount - 1,
+        nodes: data.watchers.nodes.filter(node => node.login !== "bhoomika08"),
+      }
+    }
+    this.props.client.writeFragment({ ...args, data: newData });
+  }
+
+  watch = (args) => {
+    const data = this.props.client.readFragment({ ...args });
+    const newData = {
+      ...data,
+      viewerCanSubscribe: false,
+      watchers: {
+        ...data.watchers,
+        totalCount: data.watchers.totalCount + 1,
+        nodes: data.watchers.nodes.concat(viewer),
+      }
+    }
+    this.props.client.writeFragment({ ...args, data: newData });
+    console.log("watch:", this.props.repository);
   }
 
   render() {
@@ -116,18 +136,20 @@ class PageActions extends React.Component {
           {
             Object.values(this.generateActions()).map(action => (
               <li key={action.label} onClick={action.onClick}>
-                <span className="action"><img src={action.icon} alt="na" className="icon"></img>{action.label}</span>
+                <span className="action"><img src={action.icon} alt="icon" className="icon"></img>{action.label}</span>
                 <span className="count">{action.count}</span>
               </li>
             ))
           }
-          <li onClick={this.isSubscribed}>
-            <span>Subscribe</span>
-          </li>
         </ul>
       </div>
     );
   }
 }
 
-export default PageActions;
+const MUTATE_STAR = compose(
+  graphql(ADD_STAR, { name: "addStarMutation" }),
+  graphql(REMOVE_STAR, { name: "removeStarMutation" })
+)(PageActions);
+
+export default MUTATE_STAR;

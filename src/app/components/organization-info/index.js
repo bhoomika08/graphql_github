@@ -1,134 +1,53 @@
-import React from 'react';
-import Organization from './organization';
-import * as Constants from '../../constants/constants'
-import { withApollo } from "react-apollo";
+import Header from 'app/components/organization-info/header';
 import { loader } from 'graphql.macro';
-import Header from './header';
-import UserInfo from '../user-info';
+import Organization from 'app/components/organization-info/organization.js';
+import React from 'react';
+import UserInfo from 'app/components/user-info';
+import { graphql } from "react-apollo";
+import * as Constants from 'app/constants';
 
-const GET_ORG_INFO = loader('../../graphql/queries/organization-info.gql');
-const GET_USER_INFO = loader('../../graphql/queries/user-info.gql')
-
-const getRepositories = (client, searchName, query) => {
-  return client.query({
-    query: query,
-    variables: { searchName },
-  });
-};
+const GET_ORG_INFO = loader('app/graphql/queries/organization-info.gql');
 
 class HomePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      path: '',
-      filterRepos: [],
-      search: null,
-      errors: null,
-      isOrganization: true,
-      selectedLanguages: [],
+      searchValue: props.match.params.searchName || '' ,
+      isOrganization: props.match.params.typeName === 'user' ? false : true,
     };
   }
 
-  componentDidMount() {
-    const searchType = this.props.match.params.typeName;
-    const searchName = this.props.match.params.searchName;
-    if (searchName) {
-      if (searchType === 'Organization') {
-        this.fetchDataFromGitHub(searchName, GET_ORG_INFO);
-        this.setState({
-          path: searchName,
-          isOrganization: true,
-        })
-      } else if (searchType === 'User') {
-        this.fetchDataFromGitHub(searchName, GET_USER_INFO);
-        this.setState({
-          path: searchName,
-          isOrganization: false,
-        })
-      }
-    }
-  }
-
   onChangeHandler = event => {
-    this.setState({ path: event.target.value });
+    this.setState({ searchValue: event.target.value });
   };
 
   onSubmitHandler = event => {
-    if (this.state.isOrganization) {
-      this.props.history.push(`/Organization/${this.state.path}`);
-      this.fetchDataFromGitHub(this.state.path, GET_ORG_INFO);
-    } else {
-      this.props.history.push(`/User/${this.state.path}`);
-      this.fetchDataFromGitHub(this.state.path, GET_USER_INFO);
-    }
     event.preventDefault();
-  };
-
-  fetchDataFromGitHub = (path, query) => {
-    this.setState({ isLoading: true })
-    getRepositories(this.props.client, path, query)
-      .then(queryResult => {
-        const { data, loading, error } = queryResult
-        if (this.state.isOrganization) {
-          this.setState({
-            search: data.organization,
-            error: error,
-            isLoading: loading
-          })
-        } else {
-          this.setState({
-            search: data.user,
-            error: error,
-            isLoading: loading
-          })
-        }
-      }
-      ).catch(error => this.setState({ error: error.message, isLoading: false}))
+    if (this.state.isOrganization) {
+      this.props.history.push(`/organization/${this.state.searchValue}`);
+    } else {
+      this.props.history.push(`/user/${this.state.searchValue}`);
+    }
   };
 
   clearData = () => {
     this.setState({
-      path: '',
-      filterRepos: [],
-      search: null,
+      searchValue: '',
     }, this.props.history.push(''));
-  }
-
-  filterRepos(selectedElements) {
-    const filterLangArr = [];
-    const repoArr = this.state.search.repositories.nodes
-    if (selectedElements.length) {
-      for (let i = 0; i < selectedElements.length; i++) {
-        filterLangArr.push(selectedElements[i].name);
-      }
-      const filterRepoArr = repoArr.filter(repo => {
-        let repoLangArr = [];
-        repo.languages.nodes.map(lang => repoLangArr.push(lang.name));
-        const found = repoLangArr.some(r => filterLangArr.includes(r))
-        return found;
-      });
-      this.setState({
-        filterRepos: filterRepoArr,
-        selectedLanguages: filterLangArr,
-      });
-    } else {
-      this.setState({
-        filterRepos: repoArr,
-        selectedLanguages: [],
-      });
-    }
   }
 
   setQueryType = () => {
     this.setState({
-      path: '',
-      search: null,
+      searchValue: '',
       isOrganization: !this.state.isOrganization,
-    })
+    }, this.props.history.push(''))
   }
 
   render() {
-    const { path, search, errors, filterRepos, isOrganization, isLoading } = this.state;
+    const { isOrganization, searchValue } = this.state;
+    if (this.props.data) {
+      var { variables: { searchName }, organization, loading, error } = this.props.data
+    }
     let headerTextForUser = {
       heading: Constants.SHOW_USER_REPO_TEXT,
       buttonText: Constants.ORG_SEARCH_BUTTON,
@@ -144,45 +63,59 @@ class HomePage extends React.Component {
     return (
       <div className="app">
         <Header
-          organization={search}
-          filterRepos={(selectedElements) => this.filterRepos(selectedElements)}
-          path={path}
+          path={searchValue}
           text={isOrganization ? headerTextForOrg : headerTextForUser}
           onChange={this.onChangeHandler}
           onSubmit={this.onSubmitHandler}
           onClick={this.clearData}
           setQueryType={this.setQueryType}
         />
-        {isLoading && <div className="loader-container">
-          <div className="loader"></div>
-        </div>}
-        {
-          errors &&
-          <p>{errors.message}</p>
+        {loading &&
+          <div className="loader-container">
+            <div className="loader"></div>
+          </div>
         }
-        {
-          search && (
-            isOrganization ? (
-              <Organization
-                path={path}
-                organization={search}
-                repositories={filterRepos.length ? filterRepos : search.repositories.nodes}
-                errors={errors}
-                selectedLanguages={this.state.selectedLanguages}
-              />
-            ) : (
-                <UserInfo
-                  user={search}
-                  userLogin={path}
-                  repositories={filterRepos.length ? filterRepos : search.repositories.nodes}
-                  selectedLanguages={this.state.selectedLanguages}
-                />
-              )
-          )
+        {error &&
+          <p>{error.message}</p>
+        }
+        {organization &&
+          <Organization
+            fetchedData={organization}
+            path={searchName}
+            error={error}
+          />
+        }
+        {this.props.match.params.typeName === 'user' &&
+          <UserInfo
+            searchName={this.props.match.params.searchName}
+          />
         }
       </div>
     );
   }
 }
 
-export default withApollo(HomePage);
+function skipQuery(props, typeName) {
+  if (props.match.params.typeName) {
+    if (props.match.params.typeName === typeName) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+  else {
+    return true;
+  }
+}
+
+const ORG_USER_DATA = graphql(GET_ORG_INFO, {
+    skip: (props) => {
+      return skipQuery(props, 'organization');
+    },
+    options: (props) => ({
+      variables: { searchName: props.match.params.searchName },
+      fetchPolicy: "cache-and-network",
+    }),
+  })(HomePage)
+
+export default ORG_USER_DATA;

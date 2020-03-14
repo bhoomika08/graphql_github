@@ -1,76 +1,40 @@
 import React from 'react';
-import { withApollo } from "react-apollo";
+import { graphql } from "react-apollo";
 import { loader } from 'graphql.macro';
-import PageHeader from './page-header';
-import Repositories from '../organization-info/repositories'
+import PageHeader from 'app/components/user-info/page-header';
+import Repositories from 'app/components/organization-info/repositories'
 
-const GET_USER_INFO = loader('../../graphql/queries/user-info.gql')
 
-const getRepositories = (client, searchName) => {
-  return client.query({
-    query: GET_USER_INFO,
-    variables: { searchName },
-  });
-};
+const GET_USER_INFO = loader('app/graphql/queries/user-info.gql')
 
-// const resolveRepositoryQuery = queryResult => () => ({
-//   user: queryResult.data.user,
-//   errors: queryResult.data.errors,
-// });
-
-class UserInfo extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      user: null,
-      error: null,
-    }
-  }
-
-  componentDidMount() {
-    let userLogin;
-    if (this.props.userLogin) {
-      userLogin = this.props.userLogin;
-    } else {
-      userLogin = this.props.match.params.userLogin;
-    }
-    const client = this.props.client;
-    this.setState({ isLoading: true });
-    getRepositories(client, userLogin)
-      .then(queryResult => {
-        const { data, loading, error } = queryResult
-        this.setState({
-          user: data.user,
-          error: error,
-          isLoading: loading
-        })
-      })
-      .catch(error => console.log(error.message))
-  }
-
-  render() {
-    const { user, error, isLoading } = this.state;
-    return (
-      <>
-      { isLoading && <div className="loader-container">
-          <div className="loader"></div>
-        </div> }
-      { error && <p>{error.message}</p> }  
-        {
-          user &&
-            <>
-              <PageHeader user={user} />
-              <Repositories
-                path={user.login}
-                organization={user}
-                repositories={this.props.repositories ? this.props.repositories : user.repositories.nodes}
-                selectedLanguages={this.props.selectedLanguages ? this.props.selectedLanguages : ''}
-              />
-            </>
-        }
-      </>
-    );
-  }
+const UserInfo = (props) => {
+  const { loading, error, user } = props.data;
+  return (
+    <>
+      {loading && <div className="loader-container">
+        <div className="loader"></div>
+      </div>}
+      {error && <p>{error.message}</p>}
+      {user &&
+        <>
+          <PageHeader user={user} />
+          <Repositories
+            fetchedData={user}
+            path={user.login}
+          />
+        </>
+      }
+    </>
+  );
 }
 
-export default withApollo(UserInfo);
+const USER_INFO = graphql(GET_USER_INFO, {
+  options: (props) => ({
+    variables: {
+      searchName: props.searchName ? props.searchName : props.match.params.userLogin,
+    },
+    fetchPolicy: "cache-and-network",
+  }),
+})(UserInfo)
+
+export default USER_INFO;

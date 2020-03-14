@@ -6,6 +6,10 @@
 .ml-10 {
   margin-left: 10px;
 }
+
+.mt-20 {
+  margin-top: 20px;
+}
 /* common class End*/
 
 .repo {
@@ -13,10 +17,9 @@
 }
 
 .repo ul {
-  display: table; 
   margin: 0 auto;
   list-style: none;
-	padding: 0;
+  padding: 0;
 }
 
 .repo li {

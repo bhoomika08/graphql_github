@@ -7,14 +7,14 @@ query (
     name
     description
     url
-    repositories (first: 50) {
+    repositories(first: 50) {
       totalCount
       nodes {
         id
         name
         url
         isPrivate
-        languages(first:5) {
+        languages(first: 5) {
           nodes {
             id
             name
