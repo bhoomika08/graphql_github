@@ -1,9 +1,9 @@
 import React from 'react';
 import { graphql } from "react-apollo";
 import { loader } from 'graphql.macro';
-import PageHeader from 'app/components/user-info/page-header';
-import Repositories from 'app/components/organization-info/repositories'
-
+import Header from 'app/components/user-info/header';
+import Repositories from 'app/components/repositories';
+import 'app/styles/user-info.css';
 
 const GET_USER_INFO = loader('app/graphql/queries/user-info.gql')
 
@@ -11,17 +11,21 @@ const UserInfo = (props) => {
   const { loading, error, user } = props.data;
   return (
     <>
-      {loading && <div className="loader-container">
-        <div className="loader"></div>
-      </div>}
+      {loading &&
+        <div className="loader-container">
+          <div className="loader"></div>
+        </div>
+      }
       {error && <p>{error.message}</p>}
       {user &&
         <>
-          <PageHeader user={user} />
-          <Repositories
-            fetchedData={user}
-            path={user.login}
-          />
+          <Header user={user} />
+          {user.repositories.nodes.length &&
+            <Repositories
+              fetchedData={user}
+              path={user.login}
+            />
+          }
         </>
       }
     </>

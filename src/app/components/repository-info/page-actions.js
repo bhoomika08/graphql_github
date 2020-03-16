@@ -8,7 +8,6 @@ import StarredIcon from 'assets/images/starred.png';
 import { FORK, STAR, UNSTAR, UNWATCH, WATCH } from 'app/constants';
 import { graphql, withApollo} from "react-apollo";
 import { flowRight as compose } from 'lodash';
-import 'app/styles/repository-info.css';
 
 const ADD_STAR = loader('app/graphql/mutations/addStar.gql');
 const REMOVE_STAR = loader('app/graphql/mutations/removeStar.gql');
@@ -16,6 +15,7 @@ const REMOVE_STAR = loader('app/graphql/mutations/removeStar.gql');
 const viewer = {
   __typename: "User",
   id: '08',
+  avatarUrl: "https://avatars3.githubusercontent.com/u/29602906?v=4",
   name: "Bhoomika",
   login: "bhoomika08",
 }
@@ -98,6 +98,7 @@ class PageActions extends React.Component {
             nodes {
               __typename
               id
+              avatarUrl
               name
               login
             }

@@ -4,6 +4,7 @@ import PageHeader from 'app/components/repository-info/page-header';
 import React from 'react';
 import RepoMembers from 'app/components/repository-info/repo-members';
 import { graphql } from "react-apollo";
+import 'app/styles/repository-info.css';
 
 const GET_REPOSITORIES_INFO = loader('app/graphql/queries/repositories-info.gql')
 

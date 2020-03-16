@@ -1,8 +1,8 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import RepositoryInfo from 'app/components/repository-info/index';
-import HomePage from 'app/components/organization-info/index';
-import UserInfo from 'app/components/user-info/index';
+import RepositoryInfo from 'app/components/repository-info';
+import HomePage from 'app/components/homepage';
+import UserInfo from 'app/components/user-info';
 
 const RoutesComponent = () => (
   <Switch>

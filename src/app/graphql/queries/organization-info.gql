@@ -5,6 +5,7 @@ query (
     id
     avatarUrl
     name
+    login
     description
     url
     repositories(first: 50) {

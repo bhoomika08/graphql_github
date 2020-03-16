@@ -1,6 +1,5 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import 'app/styles/repository-info.css';
 
 const PageHeader = (props) => {
   const { owner: { __typename, login }, name, descriptionHTML, primaryLanguage } = props.repository;

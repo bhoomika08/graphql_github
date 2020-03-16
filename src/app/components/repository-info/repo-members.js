@@ -1,6 +1,4 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
-import 'app/styles/repository-info.css';
 import GridView from 'app/components/repository-info/views/grid-view';
 import ListView from 'app/components/repository-info/views/list-view';
 
@@ -31,9 +29,9 @@ class RepoMembers extends React.Component {
   showMembers(view, mentionableUsers) {
     switch (view) {
       case 'grid':
-        return (<GridView mentionableUsers={mentionableUsers} />);
+        return (<GridView members={mentionableUsers} />);
       case 'list':
-        return (<ListView mentionableUsers={mentionableUsers} />);
+        return (<ListView members={mentionableUsers} />);
       default:
         return;
     }
@@ -44,16 +42,7 @@ class RepoMembers extends React.Component {
       return (
         <div>
           <p><strong>Watchers</strong></p>
-          <table className="list-view">
-            <tbody>
-              {watchers.map(watcher => (
-                <tr key={watcher.id} className="listElement">
-                  <td>{watcher.name}</td>
-                  <td><NavLink to={`/${watcher.login}`}>{watcher.login}</NavLink></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <ListView members={watchers} />
         </div>
       )
     }

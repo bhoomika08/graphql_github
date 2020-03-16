@@ -17,6 +17,7 @@ query (
       totalCount
       nodes {
         id
+        avatarUrl
         name
         login
       }

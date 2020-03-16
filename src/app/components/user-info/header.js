@@ -1,7 +1,6 @@
 import React from 'react';
-import 'app/styles/user-info.css';
 
-const PageHeader = (props) => {
+const Header = (props) => {
   const user = props.user;
   return (
     <>
@@ -24,4 +23,4 @@ const PageHeader = (props) => {
   );
 }
 
-export default PageHeader;
+export default Header;

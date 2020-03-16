@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 const GridView = (props) => {
   return (
     <div className="members-div">
-      {props.mentionableUsers.map(user => (
+      {props.members.map(user => (
         <div key={user.id} className="user-data-block">
           <img src={user.avatarUrl} alt="no-user" className="member-avatar"></img>
           <p>{user.name}</p>

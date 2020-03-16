@@ -6,7 +6,7 @@ const ListView = (props) => {
     <>
       <table className="list-view">
         <tbody>
-          {props.mentionableUsers.map(user => (
+          {props.members.map(user => (
             <tr key={user.id} className="listElement">
               <td><img src={user.avatarUrl} alt="no-user" className="member-avatar"></img></td>
               <td>{user.name}</td>

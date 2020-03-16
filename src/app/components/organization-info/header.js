@@ -1,36 +1,22 @@
 import React from 'react';
-import { TITLE } from 'app/constants'
-import 'app/styles/header.css';
 
 const Header = (props) => {
-    return (
-      <div className="app">
-        <h1>{TITLE}</h1>
+  const organization = props.organization;
+  return (
+    <div className="org-header">
+      <img className="company-logo" src={organization.avatarUrl} alt={organization.name}></img>
+      <div className="text">
         <div>
-          <div className="query-type-button" onClick={props.setQueryType}>{props.text.buttonText}</div>
+          <h2><strong>{organization.name}</strong></h2>
         </div>
-        <div>
-          <label htmlFor="url">
-            {props.text.heading}
-          </label>
+        <div className="text-grey-light">
+          {organization.description}
         </div>
-        <div className="form">
-            <input
-              id="url"
-              type="text"
-              className="search-box"
-              value={props.path}
-              onChange={props.onChange}
-              placeholder={props.text.searchPlaceholder}
-            />
-            <div>
-              <button onClick={props.onSubmit}>Search</button>
-              <button className="ml-10" onClick={props.onClick}>Clear</button>
-            </div>
-        </div>
-        <hr />
-      </div >
-    );
+      </div>
+    </div>
+  );
 }
 
 export default Header;
+
+
