@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import 'app/styles/repositories.css';
-import * as Constants from 'app/constants';
+import { REPO_COUNT_TEXT, REPOSITORY_TEXT} from 'app/constants';
 import LockIcon from 'assets/images/lock-icon.png';
 import { Multiselect } from 'multiselect-react-dropdown';
 
@@ -104,7 +104,7 @@ class Repositories extends React.Component {
         <div className="d-flex">
           <div className="form-left">
             <p>
-              <strong>{Constants.REPO_COUNT_TEXT}{repositories.totalCount}</strong>
+              <strong>{REPO_COUNT_TEXT}{repositories.totalCount}</strong>
             </p>
             <p>Viewed Repositories: {viewedRepositories.length}</p>
           </div>
@@ -120,7 +120,7 @@ class Repositories extends React.Component {
               <React.Fragment key={repository.id}>
                 <li>
                   <div className="mb-20">
-                    <NavLink to={`/repository/${path}/${repository.name}`}><strong>{repository.name}</strong></NavLink>
+                    <NavLink to={`/${REPOSITORY_TEXT}/${path}/${repository.name}`}><strong>{repository.name}</strong></NavLink>
                     {
                       repository.isPrivate ? <span className="private-icon"><img src={LockIcon} alt="no-img" className="icon"></img>Private</span> : ''
                     }

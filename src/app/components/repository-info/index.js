@@ -3,8 +3,7 @@ import PageActions from 'app/components/repository-info/page-actions';
 import PageHeader from 'app/components/repository-info/page-header';
 import React from 'react';
 import RepoMembers from 'app/components/repository-info/repo-members';
-import { graphql, withApollo } from "react-apollo";
-import { flowRight as compose } from 'lodash';
+import { graphql } from "react-apollo";
 
 const GET_REPOSITORIES_INFO = loader('app/graphql/queries/repositories-info.gql')
 
@@ -33,7 +32,7 @@ class RepositoryInfo extends React.Component {
           repository &&
           <>
             <PageHeader repository={repository} />
-            <PageActions repository={repository} client={this.props.client} />
+            <PageActions repository={repository} />
             <RepoMembers repository={repository} />
           </>
         }
@@ -42,9 +41,7 @@ class RepositoryInfo extends React.Component {
   }
 }
 
-const REPO_INFO = compose(
-  withApollo,
-  graphql(GET_REPOSITORIES_INFO, {
+const REPO_INFO = graphql(GET_REPOSITORIES_INFO, {
   options: (props) => ({
     variables: {
       repository: props.match.params.repoName,
@@ -52,6 +49,6 @@ const REPO_INFO = compose(
     },
     fetchPolicy: "cache-and-network",
   }),
-}))(RepositoryInfo)
+})(RepositoryInfo);
 
 export default REPO_INFO;

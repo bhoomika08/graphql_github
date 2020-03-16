@@ -28,25 +28,25 @@ class RepoMembers extends React.Component {
     })
   }
 
-  showMembers(view) {
+  showMembers(view, mentionableUsers) {
     switch (view) {
       case 'grid':
-        return (<GridView repository={this.props.repository} />);
+        return (<GridView mentionableUsers={mentionableUsers} />);
       case 'list':
-        return (<ListView repository={this.props.repository} />);
+        return (<ListView mentionableUsers={mentionableUsers} />);
       default:
         return;
     }
   }
 
-  showWatchers() {
-    if (this.props.repository.watchers.nodes.length) {
+  showWatchers(watchers) {
+    if (watchers.length) {
       return (
         <div>
           <p><strong>Watchers</strong></p>
           <table className="list-view">
             <tbody>
-              {this.props.repository.watchers.nodes.map(watcher => (
+              {watchers.map(watcher => (
                 <tr key={watcher.id} className="listElement">
                   <td>{watcher.name}</td>
                   <td><NavLink to={`/${watcher.login}`}>{watcher.login}</NavLink></td>
@@ -61,12 +61,18 @@ class RepoMembers extends React.Component {
 
   render() {
     const { currentView } = this.state;
+    const { watchers, mentionableUsers } = this.props.repository;
     return (
       <div className="members-container">
         <div>
           {
             Object.values(views).map(view =>
-              <div key={view.type} className={`view-tab ${view.type === currentView ? 'active-view' : ''}`} onClick={this.handleView.bind(this, view.type)}>{view.displayName}</div>
+              <div key={view.type}
+                className={`view-tab ${view.type === currentView ? 'active-view' : ''}`}
+                onClick={this.handleView.bind(this, view.type)}
+              >
+                {view.displayName}
+              </div>
             )
           }
         </div>
@@ -74,12 +80,12 @@ class RepoMembers extends React.Component {
           <div className="form-left">
             <p><strong>Members</strong></p>
             {
-              this.showMembers(currentView)
+              this.showMembers(currentView, mentionableUsers.nodes)
             }
           </div>
           <div className="form-right">
             {
-              this.showWatchers()
+              this.showWatchers(watchers.nodes)
             }
           </div>
         </div>

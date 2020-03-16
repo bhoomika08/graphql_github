@@ -1,9 +1,17 @@
 export const ERROR_TEXT = 'Something went wrong...';
+export const FORK = 'Fork';
+export const ORGANIZATION_TEXT = 'organization';
 export const ORG_SEARCH_BUTTON = "Search By Organization";
 export const ORG_SEARCH_PLACEHOLDER = "Organization Name";
+export const REPOSITORY_TEXT = "repository";
 export const REPO_COUNT_TEXT = 'Total Repositories: ';
 export const SHOW_ORG_REPO_TEXT = 'Search Repositories for organization';
 export const SHOW_USER_REPO_TEXT = 'Search Repositories for user';
+export const STAR = 'Star';
 export const TITLE = 'React GraphQL GitHub';
+export const UNSTAR = 'Unstar';
+export const UNWATCH = 'Unwatch';
+export const USER_TEXT = 'user';
 export const USER_SEARCH_BUTTON = "Search By User";
 export const USER_SEARCH_PLACEHOLDER = "User Login";
+export const WATCH = 'Watch';

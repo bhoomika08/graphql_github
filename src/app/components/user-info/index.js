@@ -31,7 +31,7 @@ const UserInfo = (props) => {
 const USER_INFO = graphql(GET_USER_INFO, {
   options: (props) => ({
     variables: {
-      searchName: props.searchName ? props.searchName : props.match.params.userLogin,
+      searchName: props.searchName || props.match.params.userLogin,
     },
     fetchPolicy: "cache-and-network",
   }),
