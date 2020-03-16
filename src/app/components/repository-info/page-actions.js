@@ -1,53 +1,44 @@
 import React from 'react';
-import { loader } from 'graphql.macro';
 import gql from 'graphql-tag';
-import 'app/styles/repository-info.css';
+import { loader } from 'graphql.macro';
 import EyeIcon from 'assets/images/eye.png';
+import ForkIcon from 'assets/images/fork.png';
 import UnstarIcon from 'assets/images/unstar.png';
 import StarredIcon from 'assets/images/starred.png';
-import ForkIcon from 'assets/images/fork.png';
-import { graphql } from "react-apollo";
+import { FORK, STAR, UNSTAR, UNWATCH, WATCH } from 'app/constants';
+import { graphql, withApollo} from "react-apollo";
 import { flowRight as compose } from 'lodash';
+import 'app/styles/repository-info.css';
 
 const ADD_STAR = loader('app/graphql/mutations/addStar.gql');
 const REMOVE_STAR = loader('app/graphql/mutations/removeStar.gql');
 
 const viewer = {
   __typename: "User",
-  id: 10,
+  id: '08',
   name: "Bhoomika",
-  login: "bhoomika08"
+  login: "bhoomika08",
 }
 
 class PageActions extends React.Component {
-  constructor(props) {
-    super(props);
-    const { viewerHasStarred, viewerCanSubscribe, stargazers } = props.repository;
-    this.state = {
-      isSubscribed: viewerCanSubscribe,
-      isStarred: viewerHasStarred,
-      stargazersCount: stargazers.totalCount
-    }
-  }
-
   generateActions() {
     const { forkCount, viewerHasStarred, viewerCanSubscribe, watchers, stargazers } = this.props.repository;
     return {
       watch: {
-        label: viewerCanSubscribe ? "Watch" : "Unwatch",
+        label: viewerCanSubscribe ? WATCH : UNWATCH,
         icon: EyeIcon,
         count: watchers.totalCount,
         onClick: this.modifyWatchCount,
       },
       star: {
-        label: viewerHasStarred ? "Unstar" : "Star",
+        label: viewerHasStarred ? UNSTAR : STAR,
         icon: viewerHasStarred ? StarredIcon : UnstarIcon,
         count: stargazers.totalCount,
         isStarred: viewerHasStarred,
         onClick: this.mutateStar,
       },
       fork: {
-        label: "Fork",
+        label: FORK,
         icon: ForkIcon,
         count: forkCount,
       },
@@ -59,23 +50,39 @@ class PageActions extends React.Component {
   }
 
   addStar = () => {
+    const { id, stargazers } = this.props.repository;
     this.props.addStarMutation({
       variables: {
-        starrableId: this.props.repository.id
+        starrableId: id
       },
+      optimisticReposnse: {
+        starrable: {
+          id: id,
+          viewerHasStarred: true,
+          stargazers: {
+            totalCount: stargazers.totalCount + 1
+          }
+        }
+      }
     });
   }
 
   removeStar = () => {
+    const { id, stargazers } = this.props.repository;
     this.props.removeStarMutation({
-        variables: {
-          starrableId: this.props.repository.id
-        },
+      variables: {
+        starrableId: id
+      },
+      optimisticReposnse: {
+        starrable: {
+          id: id,
+          viewerHasStarred: false,
+          stargazers: {
+            totalCount: stargazers.totalCount - 1
+          }
+        }
+      }
     });
-  }
-
-  writeFragment = (args, data) => {
-    this.props.client.writeFragment({ ...args }, data);
   }
 
   modifyWatchCount = () => {
@@ -108,7 +115,7 @@ class PageActions extends React.Component {
       watchers: {
         ...data.watchers,
         totalCount: data.watchers.totalCount - 1,
-        nodes: data.watchers.nodes.filter(node => node.login !== "bhoomika08"),
+        nodes: data.watchers.nodes.filter(node => node.login !== viewer.login),
       }
     }
     this.props.client.writeFragment({ ...args, data: newData });
@@ -116,17 +123,17 @@ class PageActions extends React.Component {
 
   watch = (args) => {
     const data = this.props.client.readFragment({ ...args });
-    const newData = {
-      ...data,
+    let newData = {
+      id: this.props.repository.id,
+      __typename: 'Repository',
       viewerCanSubscribe: false,
       watchers: {
-        ...data.watchers,
+        __typename: 'UserConnection',
         totalCount: data.watchers.totalCount + 1,
-        nodes: data.watchers.nodes.concat(viewer),
+        nodes: [...data.watchers.nodes.concat(viewer)],
       }
     }
     this.props.client.writeFragment({ ...args, data: newData });
-    console.log("watch:", this.props.repository);
   }
 
   render() {
@@ -148,8 +155,9 @@ class PageActions extends React.Component {
 }
 
 const MUTATE_STAR = compose(
+  withApollo,
   graphql(ADD_STAR, { name: "addStarMutation" }),
-  graphql(REMOVE_STAR, { name: "removeStarMutation" })
+  graphql(REMOVE_STAR, { name: "removeStarMutation" }),
 )(PageActions);
 
 export default MUTATE_STAR;
