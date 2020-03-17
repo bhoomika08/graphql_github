@@ -17,7 +17,7 @@ const UserInfo = (props) => {
         </div>
       }
       {error && <p>{error.message}</p>}
-      {user &&
+      {user && !error &&
         <>
           <Header user={user} />
           {user.repositories.nodes.length &&

@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 const ListView = (props) => {
   return (
     <>
-      <table className="list-view">
+      <table className="list-view mb-20">
         <tbody>
           {props.members.map(user => (
             <tr key={user.id} className="listElement">

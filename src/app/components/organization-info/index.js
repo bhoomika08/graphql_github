@@ -17,7 +17,7 @@ const Organization = (props) => {
         </div>
       }
       {error && <p>{error.message}</p>}
-      {organization &&
+      {organization && !error &&
         <div className="app">
           <Header organization={organization} />
           {organization.repositories.nodes.length &&
