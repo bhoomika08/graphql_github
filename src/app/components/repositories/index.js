@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import 'app/styles/repositories.css';
-import { REPO_COUNT_TEXT, REPOSITORY_TEXT} from 'app/constants';
+import { REPO_COUNT_TEXT, REPOSITORY_TEXT } from 'app/constants';
 import LockIcon from 'assets/images/lock-icon.png';
 import { Multiselect } from 'multiselect-react-dropdown';
 
@@ -56,9 +56,8 @@ class Repositories extends React.Component {
         filterLangArr.push(selectedList[i].name);
       }
       const filterRepoArr = repoArr.filter(repo => {
-        let repoLangArr = [];
-        repo.languages.nodes.map(lang => repoLangArr.push(lang.name));
-        const found = repoLangArr.some(r => filterLangArr.includes(r))
+        let found = repo.languages.nodes.some(lang => filterLangArr.includes(lang.name)
+        );
         return found;
       });
       this.setState({
@@ -97,8 +96,9 @@ class Repositories extends React.Component {
   render() {
     const { path, fetchedData: { repositories, repositories: { nodes } } } = this.props;
     const { filterRepos, selectedLanguages } = this.state;
-    let viewedRepositories = filterRepos.length ? filterRepos : repositories.nodes;
-
+    console.log("filterRepos:", filterRepos.length);
+    let viewedRepositories = filterRepos.length > 0 ? filterRepos : repositories.nodes;
+    console.log(viewedRepositories);
     return (
       <div className="app">
         <div className="d-flex">
@@ -122,7 +122,7 @@ class Repositories extends React.Component {
                   <div className="mb-20">
                     <NavLink to={`/${REPOSITORY_TEXT}/${path}/${repository.name}`}><strong>{repository.name}</strong></NavLink>
                     {
-                      repository.isPrivate ? <span className="private-icon"><img src={LockIcon} alt="no-img" className="icon"></img>Private</span> : ''
+                      repository.isPrivate && <span className="private-icon"><img src={LockIcon} alt="no-img" className="icon"></img>Private</span>
                     }
                   </div>
                   <div className="d-flex">

@@ -20,7 +20,7 @@ const Organization = (props) => {
       {organization && !error &&
         <div className="app">
           <Header organization={organization} />
-          {organization.repositories.nodes.length &&
+          {organization.repositories.nodes.length > 0 &&
             <Repositories
               fetchedData={organization}
               path={organization.login}

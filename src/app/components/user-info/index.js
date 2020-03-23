@@ -20,7 +20,7 @@ const UserInfo = (props) => {
       {user && !error &&
         <>
           <Header user={user} />
-          {user.repositories.nodes.length &&
+          {user.repositories.nodes.length > 0 &&
             <Repositories
               fetchedData={user}
               path={user.login}

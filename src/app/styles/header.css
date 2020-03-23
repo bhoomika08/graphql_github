@@ -18,9 +18,9 @@
   width: 50%;
 }
 
-.query-type-button {
+.button-container > div {
 	display: inline-block;
-	background-color: rgb(218, 213, 213);
+	background-color: #ffffff;
 	border: 1px solid black;
 	color: black;
 	padding: 6px;
@@ -28,4 +28,9 @@
 	margin-bottom: 10px;
 	cursor: pointer;
   font-weight: bold;
+}
+
+.button-container .btn-disabled {
+  cursor: not-allowed;
+  background-color: #f1ebeb;
 }

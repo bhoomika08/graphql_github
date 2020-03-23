@@ -6,7 +6,7 @@ import ForkIcon from 'assets/images/fork.png';
 import UnstarIcon from 'assets/images/unstar.png';
 import StarredIcon from 'assets/images/starred.png';
 import { FORK, STAR, UNSTAR, UNWATCH, WATCH } from 'app/constants';
-import { graphql, withApollo} from "react-apollo";
+import { graphql, withApollo } from "react-apollo";
 import { flowRight as compose } from 'lodash';
 
 const ADD_STAR = loader('app/graphql/mutations/addStar.gql');
