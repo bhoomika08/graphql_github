@@ -1,14 +1,18 @@
+import React from 'react';
+import { graphql } from "react-apollo";
 import { loader } from 'graphql.macro';
+import { ViewerContext } from 'app/contexts/ViewerContext.js';
 import PageActions from 'app/components/repository-info/page-actions';
 import PageHeader from 'app/components/repository-info/page-header';
-import React from 'react';
+import Footer from 'app/sharedComponents/footer.js';
 import RepoMembers from 'app/components/repository-info/repo-members';
-import { graphql } from "react-apollo";
 import 'app/styles/repository-info.css';
 
-const GET_REPOSITORIES_INFO = loader('app/graphql/queries/repositories-info.gql')
+const GET_REPOSITORIES_INFO = loader('app/graphql/queries/repositories-info.gql');
+
 
 class RepositoryInfo extends React.Component {
+  static contextType = ViewerContext;
   constructor(props) {
     super(props);
     this.state = {
@@ -18,7 +22,8 @@ class RepositoryInfo extends React.Component {
   }
 
   render() {
-    const { loading, error, repository} = this.props.data;
+    let viewerDetails = this.context;
+    const { loading, error, repository } = this.props.data;
     return (
       <>
         {loading &&
@@ -35,6 +40,7 @@ class RepositoryInfo extends React.Component {
             <PageHeader repository={repository} />
             <PageActions repository={repository} />
             <RepoMembers repository={repository} />
+            <Footer {...viewerDetails} />
           </>
         }
       </>

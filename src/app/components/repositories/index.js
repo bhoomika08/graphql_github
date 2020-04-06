@@ -96,9 +96,8 @@ class Repositories extends React.Component {
   render() {
     const { path, fetchedData: { repositories, repositories: { nodes } } } = this.props;
     const { filterRepos, selectedLanguages } = this.state;
-    console.log("filterRepos:", filterRepos.length);
     let viewedRepositories = filterRepos.length > 0 ? filterRepos : repositories.nodes;
-    console.log(viewedRepositories);
+
     return (
       <div className="app">
         <div className="d-flex">

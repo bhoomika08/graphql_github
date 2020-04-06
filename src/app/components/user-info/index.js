@@ -1,6 +1,8 @@
 import React from 'react';
 import { graphql } from "react-apollo";
 import { loader } from 'graphql.macro';
+import { ViewerContext } from 'app/contexts/ViewerContext.js';
+import Footer from 'app/sharedComponents/footer.js';
 import Header from 'app/components/user-info/header';
 import Repositories from 'app/components/repositories';
 import 'app/styles/user-info.css';
@@ -26,6 +28,11 @@ const UserInfo = (props) => {
               path={user.login}
             />
           }
+          <ViewerContext.Consumer>
+            {(viewerDetails) => (
+              <Footer {...viewerDetails} />
+            )}
+          </ViewerContext.Consumer>
         </>
       }
     </>

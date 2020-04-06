@@ -19,6 +19,7 @@ class Header extends React.Component {
     this.state = {
       searchValue: searchName || '',
       isOrganization: typeName === Constants.USER_TEXT ? false : true,
+      counter: 4
     };
   }
 
@@ -56,10 +57,21 @@ class Header extends React.Component {
     }, this.props.history.push(''));
   }
 
+  incrementCounter = () => {
+    this.setState({
+      counter: this.state.counter + 1,
+    })
+  }
+
   render() {
     const { isOrganization, searchValue } = this.state;
+    if (this.state.counter === 5) {
+      // Simulate an error!
+      throw new Error('I crashed!');
+    }
     return (
-      <div className="app">
+      <div className="center">
+        <button onClick={this.incrementCounter}>Counter</button>
         <h1>{Constants.HOMEPAGE_TITLE}</h1>
         <div className="button-container">
           <div className={isOrganization ? 'btn-disabled' : ''} onClick={this.setOrganizationType}>Organization</div>
