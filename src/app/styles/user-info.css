@@ -1,0 +1,25 @@
+.header {
+  margin-left: 30px;
+}
+
+.user-avatar {
+  float: left;
+  width: 150px;
+  height: 150px;
+  margin-right: 20px;
+}
+
+.user-details-div {
+  text-align: left;
+  height: 160px;
+}
+
+.user-info {
+  text-align: left;
+}
+
+.user-repo-container {
+  float: left;
+  margin-left: 50px;
+  margin-top: 15px; 
+}

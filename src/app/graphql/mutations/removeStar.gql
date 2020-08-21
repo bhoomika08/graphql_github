@@ -1,0 +1,11 @@
+mutation ($starrableId: ID!) {
+  removeStar(input: {starrableId: $starrableId}) {
+    starrable {
+      id
+      viewerHasStarred
+      stargazers {
+        totalCount
+      }
+    }
+  }
+}

@@ -1,0 +1,44 @@
+query (
+  $repository: String!,
+  $owner: String!
+) {
+  repository(owner: $owner, name: $repository) {
+    id
+    viewerHasStarred
+    viewerCanSubscribe
+    owner {
+      __typename
+      login
+    }
+    name
+    isPrivate
+    descriptionHTML
+    watchers(first: 5) {
+      totalCount
+      nodes {
+        id
+        avatarUrl
+        name
+        login
+      }
+    }
+    stargazers {
+      totalCount
+    }
+    forkCount
+    url
+    primaryLanguage {
+      name
+      color
+    }
+    mentionableUsers(first: 5) {
+      nodes {
+        id
+        avatarUrl
+        name
+        login
+        email
+      }
+    }
+  }
+}

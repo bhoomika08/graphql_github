@@ -1,0 +1,28 @@
+query (
+  $searchName: String!,
+) {
+  organization(login: $searchName) {
+    id
+    avatarUrl
+    name
+    login
+    description
+    url
+    repositories(first: 50) {
+      totalCount
+      nodes {
+        id
+        name
+        url
+        isPrivate
+        languages(first: 5) {
+          nodes {
+            id
+            name
+            color
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+.company-logo {
+  float: left;
+  width: 100px;
+  height: 100px;
+  margin-right: 10px;
+  margin-left: 30px;
+}
+
+.text {
+  text-align: left;
+  margin-left: 120px;
+  height: 100px;
+}
+
+.text-grey-light {
+  color: #6a737d;
+}
+
+.org-header {
+  border-bottom: 1px solid #6a737d;
+  height: 150px;
+}

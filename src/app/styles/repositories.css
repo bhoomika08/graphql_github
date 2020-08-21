@@ -1,0 +1,59 @@
+.repo {
+  text-align: left !important;
+}
+
+.repo ul {
+  margin: 0 auto;
+  list-style: none;
+  padding: 0;
+}
+
+.repo li {
+  border-bottom: solid 1px;
+  border-color: grey;
+  width: 100%;
+  display: inline-block;
+  padding: 20px 0;
+}
+
+.repo a {
+  color: #0366d6;
+  font-size: 18px;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.repo a:hover {
+  text-decoration: underline;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.repo .repo-url {
+  font-size: 14px;
+}
+
+.languages {
+  margin-left: auto;
+}
+
+.highlight {
+  background-color: yellow;
+}
+
+.private-icon {
+  display: inline-block;
+  padding: 1px 5px 1px 5px;
+  margin-top: 0;
+  margin-left: 20px;
+  border: 1px solid rgb(189, 194, 185);
+  border-radius: 4px;
+}
+
+.icon {
+  width: 15px;
+  height: 15px;
+  margin-right: 2px;
+}
